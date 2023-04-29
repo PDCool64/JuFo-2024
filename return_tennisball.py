@@ -26,5 +26,6 @@ def is_tennisball(im):
 if __name__ == "__main__":
     if is_tennisball(im):
         print("Tennisball")
+        return True
     else:
         print("Not Tennisball")
