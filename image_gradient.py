@@ -7,37 +7,7 @@ def getGradient(im):
     gradient = Image.new("L", (width, height))
     for x in range(width):
         for y in range(height):
-    #         pixel = im.getpixel((x, y))
-    #         if y == 0:
-    #             pixel_above = pixel
-    #         else:
-    #             pixel_above = im.getpixel((x, y-1))
-    #         if y == height - 1:
-    #             pixel_below = pixel
-    #         else:
-    #             pixel_below = im.getpixel((x, y+1))
-    #         if x == 0:
-    #             pixel_left = pixel
-    #         else:
-    #             pixel_left = im.getpixel((x-1, y))
-    #         if x == width - 1:
-    #             pixel_right = pixel
-    #         else:
-    #             pixel_right = im.getpixel((x+1, y))
-
-    #         diff_y = 0
-    #         if y > 0:
-    #             diff_y += sum([abs(pixel[i] - pixel_above[i]) for i in range(3)])
-    #         if y < height - 1:
-    #             diff_y += sum([abs(pixel[i] - pixel_below[i]) for i in range(3)])
-    #         diff_x = 0
-    #         if x > 0:
-    #             diff_x += sum([abs(pixel[i] - pixel_left[i]) for i in range(3)])
-    #         if x < width - 1:
-    #             diff_x += sum([abs(pixel[i] - pixel_right[i]) for i in range(3)])
-    #         diff = diff_x + diff_y
             gradient.putpixel((x, y), 255 - (get_difference_from_surounding_pixels(im, x, y, 1)//2))
-
     return gradient
 
 def get_difference_from_surounding_pixels(image, x, y, radius=1):
@@ -49,11 +19,9 @@ def get_difference_from_surounding_pixels(image, x, y, radius=1):
     for x, y in pixel_to_compare:
         if 0 <= x < width and 0 <= y < height:
             pixels.append(image.getpixel((x, y)))
-    
     for pix in pixels:
         difference += sum([abs(pixel[i] - pix[i]) for i in range(3)])
     return difference
-
 
 def getGELB(image):
     result = Image.new("L", image.size)
@@ -95,7 +63,6 @@ def fill_to_threshold(img, threshold):
             if pixel > threshold:
                 img.putpixel((x, y), 255)
             else: img.putpixel((x, y), 0)
-    
         
 def find_objects_of_size(img, size):
     visited = set()
@@ -106,16 +73,24 @@ def find_objects_of_size(img, size):
             if pixel:
                 pass
             
-            
 def get_cool_boy(original, mask):
     width, height = original.size
     for x in range(width):
         for y in range(height):
             pixel = original.getpixel((x, y))
-            r = pixel[0] * (0.2 + mask.getpixel((x, y)) / 310)
-            g = pixel[1] * (0.2 + mask.getpixel((x, y)) / 310)
-            b = pixel[2] * (0.2 + mask.getpixel((x, y)) / 310)
+            r = pixel[0] * (0.1 + mask.getpixel((x, y)) / 300)
+            g = pixel[1] * (0.1 + mask.getpixel((x, y)) / 300)
+            b = pixel[2] * (0.1 + mask.getpixel((x, y)) / 300)
             original.putpixel((x, y), (int(r), int(g), int(b)))
+
+def normalise(image):
+    min, max = image.getextrema()
+    if max == 255:
+        return
+    for x in range(image.size[0]):
+        for y in range(image.size[1]):
+            pixel = image.getpixel((x, y))
+            image.putpixel((x, y), int(pixel * 255 / (max)))
 
 if __name__ == "__main__":
     im = Image.open("Test_Images/test3.jpg")
