@@ -11,7 +11,7 @@ def test(im):
     im.show()
 
 
-def is_tennisball(im):
+def is_tennisball(im: Image):
     width, height = im.size
     for x in range(int(1/3 * width), int(2/3 * height)):
         for y in range(height):
@@ -26,6 +26,5 @@ def is_tennisball(im):
 if __name__ == "__main__":
     if is_tennisball(im):
         print("Tennisball")
-        return True
     else:
         print("Not Tennisball")
